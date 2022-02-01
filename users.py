@@ -23,11 +23,15 @@ def get_all_users():
 def add_user():
     conn = get_db_connection()
     data = request.get_json(force=True)
-    name = data['name']
-    height = data['height']
-    hair_length = data['hair_length'] 
-    #TODO: check parameter validity for the above fields
-    # I think ??? or should we assume they are correct ?
+
+    try:
+        name = data['name']
+        height = data['height']
+        hair_length = data['hair_length']
+    except:
+        conn.close()
+        return {'message' : 'Fields must be nonempty!'}
+
 
     conn.execute('INSERT INTO users VALUES (?, ?, ?)', (name, height, hair_length))
     conn.commit()
@@ -57,11 +61,11 @@ def modify_user(name):
     conn.execute('UPDATE users SET name = ?, height = ?, hair_length = ? WHERE name = ?', (new_name, new_height, new_hair_length, name))
     conn.commit()
     conn.close()
-    return data
+    return {'message' : 'User updated!'}
 
 @users.route('/users/<name>', methods=['DELETE'])
 def delete_user(name):
     conn = get_db_connection()
     conn.execute('DELETE FROM users WHERE name = ?', (name,))
     conn.commit()
-    return {'meesage':'successfully deleted'}
+    return {'message':'Successfully deleted!'}
