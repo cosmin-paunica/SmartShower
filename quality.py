@@ -20,7 +20,7 @@ def get_quality_info():
     conn.close()
     return result
 
-@quality.route('quality', methods=['POST'])
+@quality.route('/quality', methods=['POST'])
 def set_quality_info():
     conn = get_db_connection()
     quality_info = {
