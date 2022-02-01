@@ -17,6 +17,6 @@ def add_consumption():
     conn = get_db_connection()
     data = request.get_json(force=True)
     consumption = data['consumption']
-    conn.execute("INSERT INTO water_consumption(consumption) VALUES (?)", (consumption))
+    conn.execute("INSERT INTO water_consumption(consumption) VALUES (?)", (consumption,))
     conn.commit()
-    return {"message":"successful"}
+    return {"message":"Water consumption inserted successfully!"}

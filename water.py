@@ -29,5 +29,5 @@ def set_water_params():
     rows = conn.execute('INSERT INTO water(temperature, preparation_date) VALUES (?,?)', (new_temp, new_date)).fetchall()
     conn.commit()
     conn.close()
-    return {'message':'success'}
+    return {'message':'Watter parameters added successfully!'}
 

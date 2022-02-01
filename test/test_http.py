@@ -17,6 +17,7 @@ def test_root_endpoint(client):
     assert 'Welcome to SmartShower!' in html
     assert landing.status_code == 200
 
+# Test Users
 def test_get_users(client):
     landing = client.get("/users")
     assert landing.status_code == 200
@@ -51,3 +52,47 @@ def test_delete_user(client):
     res = json.loads(landing.data.decode())
     assert landing.status_code == 200
     assert res["message"] == 'Successfully deleted!'
+
+
+# Test Water
+def test_get_water_params(client):
+    landing = client.get("/water")
+    assert landing.status_code == 200
+
+def test_set_water_params(client):
+    payload = {'temperature': '40.5', 'preparation_date' : '01/27/22'}
+    landing = client.put("/water", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == 'Watter parameters added successfully!'
+
+def test_add_consumption(client):
+    payload = {'consumption': '40.8'}
+    landing = client.post("/consumption", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "Water consumption inserted successfully!"
+
+
+# Test Shower
+def test_start_shower(client):
+    pass # TODO
+
+
+# Test Dispenser
+def test_get_fill_value(client):
+    landing = client.get("/dispenser")
+    assert landing.status_code == 200
+
+def test_use_dispenser(client):
+    payload = {'name': 'Default user'}
+    landing = client.put("/dispenser", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "Dispenser successfully used!"
+
+def test_fill_dispenser(client):
+    landing = client.post("/dispenser")
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "Dispenser successfully filled!"

@@ -40,7 +40,7 @@ def use_dispenser():
     conn.execute('INSERT INTO dispenser (fill_value) VALUES (?)', (new_fill_value,)).fetchall()
     conn.commit()
     conn.close()
-    return {"message":"successfull"}
+    return {"message":"Dispenser successfully used!"}
 
 @dispenser.route('/dispenser', methods=['POST'])
 def fill_dispenser():
@@ -48,4 +48,4 @@ def fill_dispenser():
     conn.execute('INSERT INTO dispenser (fill_value) VALUES (?)', (100,)).fetchall()
     conn.commit()
     conn.close()
-    return {"message":"successfull"}
+    return {"message":"Dispenser successfully filled!"}
