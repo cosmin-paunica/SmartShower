@@ -28,4 +28,4 @@ def set_quality_info():
         (quality_info["water_quality"], quality_info['filter_quality'], quality_info['dispenser_quality']))
     conn.commit()
     conn.close()
-    return {"message":"Success"}
+    return {"message":"Quality inserted successfully!"}

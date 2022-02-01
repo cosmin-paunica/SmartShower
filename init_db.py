@@ -57,5 +57,18 @@ water_consumption_to_insert = [ # 37 - 94 L / 5 min
 ]
 cur.executemany("INSERT INTO water_consumption(consumption) VALUES (?)", water_consumption_to_insert)
 
+quality_to_insert = [
+    ('95', '99', '99'),
+    ('95', '99', '97'),
+    ('94', '98', '97'),
+    ('93', '96', '94'),
+    ('92', '95', '94'),
+    ('91', '93', '93'),
+    ('90', '91', '90'),
+    ('86', '88', '83'),
+    ('80', '87', '78')
+]
+cur.executemany("INSERT INTO quality(water_quality, dispenser_quality, filter_quality) VALUES (?, ?, ?)", quality_to_insert)
+
 connection.commit()
 connection.close()

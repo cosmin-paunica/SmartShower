@@ -16,9 +16,9 @@ def start_shower():
     # pune quality in baza de date
     use_dispenser()
     set_quality_info()
-    return {"message":"successfull"}
+    return {"message":"Shower started successfully!"}
 
 @shower.route('/end', methods=['POST'])
 def end_shower():
     add_consumption()
-    return {"message":"successfull"}
+    return {"message":"Shower ended successfully!"}
