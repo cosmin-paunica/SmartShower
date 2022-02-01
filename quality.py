@@ -24,9 +24,9 @@ def get_quality_info():
 def set_quality_info():
     conn = get_db_connection()
     quality_info = {
-        "water_quality": random(),
-        "filter_quality": random(),
-        "dispenser_quality": random()
+        "water_quality": random.random(),
+        "filter_quality": random.random(),
+        "dispenser_quality": random.random()
     }
     conn.execute("INSERT INTO quality(water_quality,filter_quality,dispenser_quality) VALUES (?, ?, ?)", 
         (quality_info["water_quality"], quality_info['filter_quality'], quality_info['dispenser_quality']))
