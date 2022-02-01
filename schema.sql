@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS dispenser;
 DROP TABLE IF EXISTS water;
 DROP TABLE IF EXISTS quality;
+DROP TABLE IF EXISTS water_consumption;
 
 CREATE TABLE users (
     name TEXT PRIMARY KEY,
@@ -20,6 +21,12 @@ CREATE TABLE water (
     timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     temperature FLOAT NOT NULL,
     preparation_date DATE NOT NULL
+);
+
+CREATE TABLE water_consumption (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    consumption FLOAT NOT NULL
 );
 
 CREATE TABLE quality (
