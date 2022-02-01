@@ -1,4 +1,4 @@
-import sqlite3
+from db_conn import get_db_connection
 from subprocess import STARTF_USESTDHANDLES
 from dispenser import use_dispenser
 from flask import Blueprint, request
@@ -7,10 +7,6 @@ from quality import set_quality_info
 from users import get_single_user
 from water_consumption import add_consumption
 
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
 
 shower = Blueprint('shower', __name__)
 
