@@ -1,0 +1,467 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "These are the routes for a Smart Shower IoT device capable of many smart things.   \n   For this sample, you can use the api key `special-key` to test the authorization     filters.",
+    "version": "1.0.0",
+    "title": "SmartShower",
+    "termsOfService": "https://github.com/cosmin-paunica/SmartShower",
+    "contact": {
+      "email": "chillin_bunouts@fmi.unibuc.ro"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "water",
+      "description": "Everything about water temperature"
+    },
+    {
+      "name": "water_consumption",
+      "description": "Everything about water consumption"
+    },
+    {
+      "name": "dispenser",
+      "description": "Stats about the shower gel levels"
+    },
+    {
+      "name": "quality",
+      "description": "Stats about the quality of the water and parts"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/water": {
+      "put": {
+        "tags": [
+          "water"
+        ],
+        "summary": "Set a new temperature for water at a given timestamp",
+        "description": "The SmartShower will preheat the water so that it's ready at the given time",
+        "operationId": "setWaterTemperature",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "A temperature and a date",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WaterTemperature"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "water"
+        ],
+        "summary": "Add a preparation order",
+        "description": "",
+        "operationId": "getWaterTemperature",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Seccessfully retrieved data",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/WaterTemperatureRow"
+            }
+          },
+          "404": {
+            "description": "Pet not found"
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      }
+    },
+    "/dispenser": {
+      "get":{
+        "tags": [
+          "dispenser"
+        ],
+        "summary": "Get the current state of the shower gel",
+        "description": "",
+        "operationId": "getDispenserState",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Seccessfully retrieved data",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/DispenserState"
+            }
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "put": {
+        "tags": ["dispenser"],
+        "summary": "Set the new state of the shower gel after a shower",
+        "description": "",
+        "operationId": "setDispenserState",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The name of the user that wants to use the shower gel",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UseDispenser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "post": {
+        "tags": ["dispenser"],
+        "summary": "Fills up the shower gel dispenser",
+        "description": "",
+        "operationId": "fillDispenserState",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+
+      }
+    },
+    "/quality": {
+      "get": {
+        "tags": [
+          "quality"
+        ],
+        "summary": "Get the current state of the shower parts",
+        "description": "",
+        "operationId": "getQualityState",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Seccessfully retrieved data",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/QualityState"
+            }
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "post": {
+        "tags": ["quality"],
+        "summary": "Set the new state of the shower parts after a shower",
+        "description": "",
+        "operationId": "setQualityState",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": " The new stats for the parts",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateQuality"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get all the users of the shower",
+        "description": "",
+        "operationId": "getUsers",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Seccessfully retrieved data",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "405": {
+            "description": "Validation exception"
+          }
+        }
+      },
+      "post": {
+        "tags": ["users"],
+        "summary": "Creates a new User",
+        "description": "",
+        "operationId": "createUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The new user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "WaterTemperature": {
+      "type": "object",
+      "required": [
+        "temperature",
+        "preparation_date"
+      ],
+      "properties": {
+        "temperature": {
+          "type": "integer",
+          "example": "23"
+        },
+        "preparation_date": {
+          "type": "string",
+          "format": "date-time",
+          "example": "12-02-2022 13:30"
+        }
+      }
+    },
+    "WaterTemperatureRow": {
+      "type": "object",
+      "required": [
+        "id",
+        "temperature",
+        "preparation_date",
+        "timestamp"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": "1"
+        },
+        "temperature": {
+          "type": "integer",
+          "example": "23"
+        },
+        "preparation_date": {
+          "type": "string",
+          "format": "date-time",
+          "example": "12-02-2022 13:30"
+        },
+        "timestamp": {
+          "type": "string",
+          "example": "2022-02-01 17:27:21"
+        }
+      }
+    },
+    "DispenserState": {
+      "type": "object",
+      "required": [
+        "id",
+        "state",
+        "timestamp"
+      ],
+      "properties": {
+        "fill_value": {
+          "type": "string",
+          "example": "100.0"
+        }
+      }
+    },
+    "UseDispenser":{
+      "type":"object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Alin"
+        }
+      }
+    },
+    "User":{
+      "type":"object",
+      "required": [
+        "name",
+        "height",
+        "hair_length"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Alin"
+        },
+        "height": {
+          "type": "integer",
+          "example": "180"
+        },
+        "hair_length": {
+          "type": "integer",
+          "example": "1"
+        }
+      }
+    },
+    "QualityState":{
+      "type": "object",
+      "required": [
+        "id",
+        "water_quality",
+        "dispenser_quality",
+        "filter_quality",
+        "timestamp"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": "1"
+        },
+        "water_quality": {
+          "type": "integer",
+          "example": "23%"
+        },
+        "dispenser_quality": {
+          "type": "integer",
+          "example": "23%"
+        },
+        "filter_quality": {
+          "type": "integer",
+          "example": "44%"
+        },
+        "timestamp": {
+          "type": "string",
+          "example": "2022-02-01 17:27:21"
+        }
+      }
+    },
+    "UpdateQuality":{
+      "type":"object",
+      "required": [
+        "water_quality",
+        "dispenser_quality",
+        "filter_quality"
+      ],
+      "properties": {
+        "water_quality": {
+          "type": "integer",
+          "example": "23%"
+        },
+        "dispenser_quality": {
+          "type": "integer",
+          "example": "55%"
+        },
+        "filter_quality": {
+          "type": "integer",
+          "example": "100%"
+        }
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
