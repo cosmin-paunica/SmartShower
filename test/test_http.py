@@ -76,7 +76,18 @@ def test_add_consumption(client):
 
 # Test Shower
 def test_start_shower(client):
-    pass # TODO
+    payload = {'name': 'Default user'}
+    landing = client.get("/start", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "Shower started successfully!"
+
+def test_end_shower(client):
+    payload = {'consumption': '40.8'}
+    landing = client.post("/end", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "Shower ended successfully!"
 
 
 # Test Dispenser
@@ -96,3 +107,15 @@ def test_fill_dispenser(client):
     res = json.loads(landing.data.decode())
     assert landing.status_code == 200
     assert res["message"] == "Dispenser successfully filled!"
+
+
+# Test Quality
+def test_get_quality_info(client):
+    landing = client.get("/quality")
+    assert landing.status_code == 200
+
+def test_set_quality_info(client):
+    landing = client.post("/quality")
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "Quality inserted successfully!"
