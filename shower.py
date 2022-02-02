@@ -5,7 +5,7 @@ from flask import Blueprint, request
 from quality import set_quality_info
 
 from users import get_single_user
-from water_consumption import add_consumption
+from water import add_consumption
 
 
 shower = Blueprint('shower', __name__)
