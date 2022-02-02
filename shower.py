@@ -3,6 +3,7 @@ from subprocess import STARTF_USESTDHANDLES
 from dispenser import use_dispenser
 from flask import Blueprint, request
 from quality import set_quality_info
+from spotify import get_song
 
 from users import get_single_user
 from water import add_consumption
@@ -16,7 +17,12 @@ def start_shower():
     # pune quality in baza de date
     use_dispenser()
     set_quality_info()
-    return {"message":"Shower started successfully!"}
+    data = request.get_json(force=True)
+    song = get_song(data['song_id'])
+    if song.error is not None:
+        return {"message":"Shower started successfully!"}
+    else:
+        return song
 
 @shower.route('/end', methods=['POST'])
 def end_shower():
