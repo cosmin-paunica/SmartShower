@@ -14,6 +14,7 @@ from water import water
 from quality import quality
 from shower import shower
 from status import get_status
+from spotify import spotify
 
 eventlet.monkey_patch()
 
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(water)
     app.register_blueprint(quality)
     app.register_blueprint(shower)
+    app.register_blueprint(spotify)
 
     @app.route('/')
     def welcome():
@@ -82,7 +84,7 @@ def background_thread():
 
 def run_socketio_app():
     create_app()
-    create_mqtt_app()
+    # create_mqtt_app()
     socketio.run(app, host='127.0.0.1', port=5000, use_reloader=False, debug=True)
 
 if __name__ == '__main__':
