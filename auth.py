@@ -49,6 +49,7 @@ def register():
 
 @bp.route('/login', methods=["POST"])
 def login():
+    print("Hit")
     db = get_db_connection()
     data = request.get_json(force=True)
     name = data['name']
@@ -74,23 +75,21 @@ def logout():
 
 
 # !!!!NETESTATE!!!! (they should work tho)
-# def login_required(view):
-#     @functools.wraps(view)
-#     def wrapped_view(**kwargs):
-#         if g.user is None:
-#             return jsonify({'message': 'User is not authenticated'}), 403
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if g.user is None:
+            return jsonify({'message': 'User is not authenticated'}), 403
+        return view(**kwargs)
+    return wrapped_view
 
-#         return view(**kwargs)
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
 
-#     return wrapped_view
-
-# @bp.before_app_request
-# def load_logged_in_user():
-#     user_id = session.get('user_id')
-
-#     if user_id is None:
-#         g.user = None
-#     else:
-#         g.user = get_db_connection().execute(
-#             'SELECT * FROM users WHERE name = ?', (user_id,)
-#         ).fetchone()
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = get_db_connection().execute(
+            'SELECT * FROM users WHERE name = ?', (user_id,)
+        ).fetchone()

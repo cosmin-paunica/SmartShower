@@ -1,6 +1,5 @@
 import eventlet
 import json
-import auth
 import time
 
 from flask import Flask
@@ -15,6 +14,7 @@ from quality import quality
 from shower import shower
 from status import get_status
 from spotify import spotify
+from auth import bp
 
 eventlet.monkey_patch()
 
@@ -30,7 +30,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'PDS19UkUAd1H1NiAqJjGAFT6KrN78W5J'
 
-    app.register_blueprint(auth.bp)
+    app.register_blueprint(bp)
     app.register_blueprint(users)
     app.register_blueprint(dispenser)
     app.register_blueprint(water)
@@ -52,7 +52,7 @@ def create_app():
 
 def create_mqtt_app():
     # Setup connection to mqtt broker
-    app.config['MQTT_BROKER_URL'] = '127.0.0.1'  # use the free broker from HIVEMQ
+    app.config['MQTT_BROKER_URL'] = 'localhost'  # use the free broker from HIVEMQ
     app.config['MQTT_BROKER_PORT'] = 1883  # default port for non-tls connection
     app.config['MQTT_USERNAME'] = ''  # set the username here if you need authentication for the broker
     app.config['MQTT_PASSWORD'] = ''  # set the password here if the broker demands authentication
@@ -85,7 +85,7 @@ def background_thread():
 def run_socketio_app():
     create_app()
     # create_mqtt_app()
-    socketio.run(app, host='127.0.0.1', port=5000, use_reloader=False, debug=True)
+    # socketio.run(app, host='localhost', port=5000, use_reloader=False, debug=True)
 
 if __name__ == '__main__':
     run_socketio_app()
