@@ -1,4 +1,5 @@
 import sqlite3
+from werkzeug.security import generate_password_hash
 
 connection = sqlite3.connect('database.db')
 
@@ -8,15 +9,16 @@ with open('schema.sql') as f:
 
 cur = connection.cursor()
 
+password = 'parola'
 users_to_insert = [
-    ('Default user', '180', 'short'),
-    ('Savannah Britton', '162', 'long'),
-    ('Rachel Hester', '175', 'long'),
-    ('Connor Evans', '192', 'long'),
-    ('Khloe Irvine', '182', 'short'),
-    ('Efan Olsen', '168', 'short')
+    ('Default user', generate_password_hash(password), '180', 'short'),
+    ('Savannah Britton', generate_password_hash(password), '162', 'long'),
+    ('Rachel Hester', generate_password_hash(password), '175', 'long'),
+    ('Connor Evans', generate_password_hash(password), '192', 'long'),
+    ('Khloe Irvine', generate_password_hash(password), '182', 'short'),
+    ('Efan Olsen', generate_password_hash(password), '168', 'short')
 ]
-cur.executemany("INSERT INTO users (name, height, hair_length) VALUES (?, ?, ?)", users_to_insert)
+cur.executemany("INSERT INTO users (name, password, height, hair_length) VALUES (?, ?, ?, ?)", users_to_insert)
 
 fill_value_to_insert = [
     ('95',),

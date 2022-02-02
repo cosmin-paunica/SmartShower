@@ -8,12 +8,16 @@ from water import water
 from quality import quality
 from water_consumption import water_consumption
 from shower import shower
+import auth
 
 app = None
 
 def create_app():
     global app
     app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'PDS19UkUAd1H1NiAqJjGAFT6KrN78W5J'
+
+    app.register_blueprint(auth.bp)
     app.register_blueprint(users)
     app.register_blueprint(dispenser)
     app.register_blueprint(water)

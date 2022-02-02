@@ -23,7 +23,7 @@ def test_get_users(client):
     assert landing.status_code == 200
 
 def test_add_user(client):
-    payload = {'name': 'unit_test_name', 'height': '180', 'hair_length' : 'long'}
+    payload = {'name': 'unit_test_name', 'password' : 'parola', 'height': '180', 'hair_length' : 'long'}
     res = client.post('/users', data=json.dumps(payload), follow_redirects=True)
     assert res.status_code == 200
 
