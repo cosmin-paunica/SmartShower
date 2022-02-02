@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS water_consumption;
 
 CREATE TABLE users (
     name TEXT PRIMARY KEY,
+    password TEXT NOT NULL,
     height FLOAT NOT NULL,
     hair_length TEXT NOT NULL
 );

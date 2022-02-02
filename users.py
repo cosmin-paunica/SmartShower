@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Blueprint, request
+from werkzeug.security import check_password_hash, generate_password_hash
 
 def get_db_connection():
     conn = sqlite3.connect('database.db')
@@ -28,12 +29,13 @@ def add_user():
         name = data['name']
         height = data['height']
         hair_length = data['hair_length']
+        password = data['password']
     except:
         conn.close()
         return {'message' : 'Fields must be nonempty!'}
 
 
-    conn.execute('INSERT INTO users VALUES (?, ?, ?)', (name, height, hair_length))
+    conn.execute('INSERT INTO users VALUES (?, ?, ?, ?)', (name, generate_password_hash(password), height, hair_length))
     conn.commit()
     conn.close()
 

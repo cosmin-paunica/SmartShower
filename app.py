@@ -18,11 +18,11 @@ from status import get_status
 
 eventlet.monkey_patch()
 
+
 app = None
 mqtt = None
 socketio = None
 thread = None
-
 
 
 def create_app():
