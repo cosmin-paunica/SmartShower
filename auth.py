@@ -7,20 +7,34 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/register', methods=["POST"])
 def register():
+    '''
     name = request.form['name']
     password = request.form['password']
     height = request.form['height']
     hair_length = request.form['hair_length']
+    '''
     db = get_db_connection()
+    data = request.get_json(force=True)
+    try:
+        name = data['name']
+    except KeyError:
+        return jsonify({'message': 'Name is required.'}), 403
 
-    if not name:
-        return jsonify({'status': 'Name is required.'}), 403
-    elif not password:
-        return jsonify({'status': 'Password is required.'}), 403
-    elif not height:
-        return jsonify({'status': 'Height is required.'}), 403
-    elif not hair_length:
-        return jsonify({'status': 'Hair Length is required.'}), 403
+    try:
+        password = data['password']
+    except KeyError:
+        return jsonify({'message': 'Password is required.'}), 403
+    
+    try:
+        height = data['height']
+    except KeyError:
+        return jsonify({'message': 'Height is required.'}), 403
+
+    try:    
+        hair_length = data['hair_length']
+    except KeyError:
+        return jsonify({'message': 'Hair Length is required.'}), 403
+
 
     try:
         db.execute(
@@ -29,33 +43,34 @@ def register():
         )
         db.commit()
     except db.IntegrityError:
-        return jsonify({'status': f'User {name} is already registered.'}), 403
+        return jsonify({'message': f'User {name} is already registered.'}), 403
 
-    return jsonify({'status': 'user registered succesfully'}), 200
+    return jsonify({'message': 'user registered succesfully'}), 200
 
 @bp.route('/login', methods=["POST"])
 def login():
-    name = request.form['name']
-    password = request.form['password']
     db = get_db_connection()
+    data = request.get_json(force=True)
+    name = data['name']
+    password = data['password']
     error = None
     user = db.execute(
         'SELECT * FROM users WHERE name = ?', (name,)
     ).fetchone()
 
     if user is None:
-        return jsonify({'status': 'user not found'}), 403
+        return jsonify({'message': 'user not found'}), 403
     elif not check_password_hash(user['password'], password):
-        return jsonify({'status': 'password is incorrect'}), 403
+        return jsonify({'message': 'password is incorrect'}), 403
 
     session.clear()
     session['user_id'] = user['name']
-    return jsonify({'status': 'user logged in succesfully'}), 200
+    return jsonify({'message': 'user logged in succesfully'}), 200
 
 @bp.route('/logout')
 def logout():
     session.clear()
-    return jsonify({'status': 'user logged out succesfully'}), 200
+    return jsonify({'message': 'user logged out succesfully'}), 200
 
 
 # !!!!NETESTATE!!!! (they should work tho)
@@ -63,7 +78,7 @@ def logout():
 #     @functools.wraps(view)
 #     def wrapped_view(**kwargs):
 #         if g.user is None:
-#             return jsonify({'status': 'User is not authenticated'}), 403
+#             return jsonify({'message': 'User is not authenticated'}), 403
 
 #         return view(**kwargs)
 

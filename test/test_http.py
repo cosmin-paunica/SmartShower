@@ -9,7 +9,6 @@ def client():
 
     yield client
 
-
 def test_root_endpoint(client):
     landing = client.get("/")
     html = landing.data.decode()
@@ -119,3 +118,112 @@ def test_set_quality_info(client):
     res = json.loads(landing.data.decode())
     assert landing.status_code == 200
     assert res["message"] == "Quality inserted successfully!"
+
+# Test Authentication
+def test_register_succesfull(client):
+    payload = {'name':'TestName','password':'TestPassword','height':'190','hair_length':'long'}
+    landing = client.post('/auth/register', data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "user registered succesfully"
+
+def test_register_already_registered(client):
+    payload = {
+        'name':'TestName',
+        'password':'TestPassword',
+        'height':'190',
+        'hair_length':'60'
+    }
+    landing = client.post("/auth/register", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "User TestName is already registered."
+
+def test_register_failed_no_name(client):
+    payload = {
+        'password':'TestPassword',
+        'height':'190',
+        'hair_length':'60'
+    }
+    landing = client.post("/auth/register", data=json.dumps(payload), follow_redirects=True)
+    # res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    # assert res["message"] == "Name is required."
+
+def test_register_failed_no_password(client):
+    payload = {
+        'name':'TestName',
+        'height':'190',
+        'hair_length':'60'
+    }
+    landing = client.post("/auth/register", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "Password is required."
+
+def test_register_failed_no_height(client):
+    payload = {
+        'name':'TestName',
+        'password':'TestPassword',
+        'hair_length':'60'
+    }
+    landing = client.post("/auth/register", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "Height is required."
+
+def test_register_failed_no_hair_length(client):
+    payload = {
+        'name':'TestName',
+        'password':'TestPassword',
+        'height':'190',
+    }
+    landing = client.post("/auth/register", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "Hair Length is required."
+
+def test_login_user_not_found(client):
+    payload = {
+        'name': 'NotExistingUser',
+        'password':'NotExistingPassword'
+    }
+    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "user not found"
+
+def test_login_user_wrong_password(client):
+    payload = {
+        'name': 'TestName',
+        'password':'NotExistingPassword'
+    }
+    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "password is incorrect"
+
+def test_login_succesful(client):
+    payload = {
+        'name': 'TestName',
+        'password':'TestPassword'
+    }
+    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "user logged in succesfully"
+
+# Test Spotify API
+def test_spotify_get_not_existing_id(client):
+    not_existing_id = '123456789436364215'
+    landing = client.get(f'/song/{not_existing_id}', follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "invalid id"
+
+def test_spotify_get_succesfull(client):
+    existing_id = '11dFghVXANMlKmJXsNCbNl'
+    landing = client.get(f'/song/{existing_id}', follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["id"] == existing_id
