@@ -56,19 +56,19 @@ def test_delete_user(client):
 
 # Test Water
 def test_get_water_params(client):
-    landing = client.get("/water")
+    landing = client.get("/water/temperature")
     assert landing.status_code == 200
 
 def test_set_water_params(client):
     payload = {'temperature': '40.5', 'preparation_date' : '01/27/22'}
-    landing = client.put("/water", data=json.dumps(payload), follow_redirects=True)
+    landing = client.put("/water/temperature", data=json.dumps(payload), follow_redirects=True)
     res = json.loads(landing.data.decode())
     assert landing.status_code == 200
     assert res["message"] == 'Watter parameters added successfully!'
 
 def test_add_consumption(client):
     payload = {'consumption': '40.8'}
-    landing = client.post("/consumption", data=json.dumps(payload), follow_redirects=True)
+    landing = client.post("/water/consumption", data=json.dumps(payload), follow_redirects=True)
     res = json.loads(landing.data.decode())
     assert landing.status_code == 200
     assert res["message"] == "Water consumption inserted successfully!"
