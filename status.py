@@ -7,7 +7,25 @@ def get_status():
         ' ORDER BY timestamp DESC'
     ).fetchone()
 
-    if qualities is None:
+    water = get_db_connection().execute(
+        'SELECT temperature, preparation_date'
+        ' FROM water'
+        ' ORDER BY timestamp DESC'
+    ).fetchone()
+
+    dispenser = get_db_connection().execute(
+        'SELECT fill_value'
+        ' FROM dispenser'
+        ' ORDER BY timestamp DESC'
+    ).fetchone()
+
+    water_consumption = get_db_connection().execute(
+        'SELECT consumption'
+        ' FROM water_consumption'
+        ' ORDER BY timestamp DESC'
+    ).fetchone()
+
+    if qualities is None or water is None or dispenser is None or water_consumption is None:
         return {'status': 'Query failed'}
     
     return {
@@ -15,7 +33,17 @@ def get_status():
             'qualities': {
                 'water_quality' : qualities['water_quality'],
                 'dispenser_quality' : qualities['dispenser_quality'],
-                'filter_quality' : qualities['dispenser_quality']
+                'filter_quality' : qualities['filter_quality'],
+            },
+            'water': {
+                'temperature': water['temperature'],
+                'preparation_date': water['preparation_date'],
+            },
+            'dispenser': {
+                'fill_value': dispenser['fill_value'],
+            },
+            'water_consumption': {
+                'consumption': water_consumption['consumption'],
             }
         }
     }
