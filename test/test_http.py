@@ -218,7 +218,7 @@ def test_spotify_get_not_existing_id(client):
     not_existing_id = '123456789436364215'
     landing = client.get(f'/song/{not_existing_id}', follow_redirects=True)
     res = json.loads(landing.data.decode())
-    assert landing.status_code == 200
+    assert landing.status_code == 400
     assert res["message"] == "invalid id"
 
 def test_spotify_get_succesfull(client):
