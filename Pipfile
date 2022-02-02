@@ -11,6 +11,9 @@ flask-sqlalchemy = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 pytest = "*"
+flask_mqtt = "*"
+flask_socketio = "*"
+eventlet = "*"
 
 [requires]
 python_version = "3.7"
