@@ -1,10 +1,10 @@
 # SmartShower - Chillin' Beavers
 Proiect Ingineria Programarii 2021-2022
 
-## Start the project
+### Mqtt broker: https://mosquitto.org/
+### Start the project
 - python init_db.py
 - python app.py
-- flask run
 
-## Run tests
+### Run tests
 - python -m pytest -v
