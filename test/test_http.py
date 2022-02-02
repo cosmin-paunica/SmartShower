@@ -75,7 +75,7 @@ def test_add_consumption(client):
 
 # Test Shower
 def test_start_shower(client):
-    payload = {'name': 'Default user'}
+    payload = {'name': 'Default user', 'song_id': '11dFghVXANMlKmJXsNCbNl'}
     landing = client.get("/start", data=json.dumps(payload), follow_redirects=True)
     res = json.loads(landing.data.decode())
     assert landing.status_code == 200
@@ -218,8 +218,8 @@ def test_spotify_get_not_existing_id(client):
     not_existing_id = '123456789436364215'
     landing = client.get(f'/song/{not_existing_id}', follow_redirects=True)
     res = json.loads(landing.data.decode())
-    assert landing.status_code == 400
-    assert res["message"] == "invalid id"
+    assert landing.status_code == 200
+    assert res["error"]["message"] == "invalid id"
 
 def test_spotify_get_succesfull(client):
     existing_id = '11dFghVXANMlKmJXsNCbNl'
