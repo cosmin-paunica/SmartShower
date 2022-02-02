@@ -8,7 +8,7 @@ from users import get_single_user
 
 water = Blueprint('water', __name__)
 
-@water.route('/water', methods=['GET'])
+@water.route('/water/temperature', methods=['GET'])
 def get_water_params():
     conn = get_db_connection()
     rows = conn.execute('SELECT * FROM water ORDER BY id DESC').fetchone()
@@ -17,7 +17,7 @@ def get_water_params():
     conn.close()
     return result
 
-@water.route('/water', methods=['PUT'])
+@water.route('/water/temperature', methods=['PUT'])
 def set_water_params():
     conn = get_db_connection()
     data = request.get_json(force=True)
@@ -28,3 +28,11 @@ def set_water_params():
     conn.close()
     return {'message':'Watter parameters added successfully!'}
 
+@water.route('/water/consumption', methods=['POST'])
+def add_consumption():
+    conn = get_db_connection()
+    data = request.get_json(force=True)
+    consumption = data['consumption']
+    conn.execute("INSERT INTO water_consumption(consumption) VALUES (?)", (consumption,))
+    conn.commit()
+    return {"message":"Water consumption inserted successfully!"}
