@@ -13,7 +13,7 @@ users = Blueprint('users', __name__)
 @users.route('/users', methods=['GET'])
 def get_all_users():
     conn = get_db_connection()
-    user_rows = conn.execute('SELECT * FROM users')
+    user_rows = conn.execute('SELECT name, height, hair_length FROM users')
     result = []
     for row in user_rows:
         result.append(dict(row))
@@ -44,7 +44,7 @@ def add_user():
 @users.route('/users/<name>', methods=['GET'])
 def get_single_user(name):
     conn = get_db_connection()
-    user_rows= conn.execute('SELECT * FROM users WHERE name = (?)', (name,)).fetchall()
+    user_rows= conn.execute('SELECT name, height, hair_length FROM users WHERE name = (?)', (name,)).fetchall()
 
     result = {}
     for row in user_rows:

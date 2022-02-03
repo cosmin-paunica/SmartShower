@@ -13,7 +13,7 @@ water = Blueprint('water', __name__)
 @login_required
 def get_water_params():
     conn = get_db_connection()
-    rows = conn.execute('SELECT * FROM water ORDER BY id DESC').fetchone()
+    rows = conn.execute('SELECT preparation_date, temperature FROM water ORDER BY id DESC').fetchone()
     result = dict(rows)
     
     conn.close()
