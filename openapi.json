@@ -23,6 +23,10 @@
     {
       "name": "quality",
       "description": "Stats about the quality of the water and parts"
+    },
+    {
+      "name": "auth",
+      "description": "Authentication"
     }
   ],
   "schemes": [
@@ -328,7 +332,96 @@
           }
         }
       }
+    },
+    "/auth/register":{
+      "post": {
+        "tags": ["auth"],
+        "summary": "Register a new user",
+        "description": "",
+        "operationId": "registerUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The new user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegister"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/auth/login":{
+      "post": {
+        "tags": ["auth"],
+        "summary": "  Login a user",
+        "description": "",
+        "operationId": "loginUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in":"body",
+            "name":"body",
+            "description": "Login data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+      }
     }
+    },
+    "/auth/logout":{
+      "get": {
+        "tags": ["auth"],
+        "summary": "Logout a user",
+        "description": "",
+        "operationId": "logoutUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged out"
+          },
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    }
+    
   },
   "definitions": {
     "WaterTemperature": {
@@ -435,6 +528,50 @@
         "hair_length": {
           "type": "integer",
           "example": "1"
+        }
+      }
+    },
+    "UserRegister":{
+      "type":"object",
+      "required": [
+        "name",
+        "height",
+        "hair_length",
+        "password"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Alin"
+        },
+        "height": {
+          "type": "integer",
+          "example": "180"
+        },
+        "hair_length": {
+          "type": "integer",
+          "example": "1"
+        },
+        "password": {
+          "type": "string",
+          "example": "parola"
+        }
+      }
+    },
+    "Login": {
+      "type": "object",
+      "required": [
+        "username",
+        "password"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "Alin"
+        },
+        "password": {
+          "type": "string",
+          "example": "parola"
         }
       }
     },
