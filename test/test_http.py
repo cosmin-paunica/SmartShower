@@ -2,7 +2,7 @@ import pytest
 import json
 from app import create_app
 
-@pytest.fixture
+@pytest.fixture(scope="session", autouse=True)
 def client():
     local_app = create_app()
     client = local_app.test_client()
@@ -17,6 +17,52 @@ def test_root_endpoint(client):
     assert landing.status_code == 200
 
 # Test Users
+def test_register(client):
+    payload = {'name': 'test_username', 'password' : 'test_parola', 'height': '180', 'hair_length' : 'long'}
+    res = client.post('/auth/register', data=json.dumps(payload), follow_redirects=True)
+    res_data = json.loads(res.data.decode())
+    assert res.status_code == 200
+    assert res_data["message"] == 'user registered succesfully'
+
+    payload = {'name': 'test_username', 'password' : 'test_parola', 'height': '180', 'hair_length' : 'long'}
+    res = client.post('/auth/register', data=json.dumps(payload), follow_redirects=True)
+    res_data = json.loads(res.data.decode())
+    assert res.status_code == 403
+    assert res_data["message"] == f'User {payload["name"]} is already registered.'
+
+def test_login_user_not_found(client):
+    payload = {
+        'name': 'NotExistingUser',
+        'password':'NotExistingPassword'
+    }
+    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "user not found"
+
+def test_login_user_wrong_password(client):
+    payload = {
+        'name': 'test_username',
+        'password':'NotExistingPassword'
+    }
+    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 403
+    assert res["message"] == "password is incorrect"
+
+def test_login_succesful(client):
+    payload = {
+        'name': 'test_username',
+        'password':'test_parola'
+    }
+    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
+    res = json.loads(landing.data.decode())
+    assert landing.status_code == 200
+    assert res["message"] == "user logged in succesfully"
+
+    landing = client.get("/water/temperature")
+    assert landing.status_code == 200
+
 def test_get_users(client):
     landing = client.get("/users")
     assert landing.status_code == 200
@@ -182,36 +228,6 @@ def test_register_failed_no_hair_length(client):
     res = json.loads(landing.data.decode())
     assert landing.status_code == 403
     assert res["message"] == "Hair Length is required."
-
-def test_login_user_not_found(client):
-    payload = {
-        'name': 'NotExistingUser',
-        'password':'NotExistingPassword'
-    }
-    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
-    res = json.loads(landing.data.decode())
-    assert landing.status_code == 403
-    assert res["message"] == "user not found"
-
-def test_login_user_wrong_password(client):
-    payload = {
-        'name': 'TestName',
-        'password':'NotExistingPassword'
-    }
-    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
-    res = json.loads(landing.data.decode())
-    assert landing.status_code == 403
-    assert res["message"] == "password is incorrect"
-
-def test_login_succesful(client):
-    payload = {
-        'name': 'TestName',
-        'password':'TestPassword'
-    }
-    landing = client.post("/auth/login", data=json.dumps(payload), follow_redirects=True)
-    res = json.loads(landing.data.decode())
-    assert landing.status_code == 200
-    assert res["message"] == "user logged in succesfully"
 
 # Test Spotify API
 def test_spotify_get_not_existing_id(client):

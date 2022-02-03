@@ -4,6 +4,7 @@ from dispenser import use_dispenser
 from flask import Blueprint, request
 from quality import set_quality_info
 from spotify import get_song
+from auth import login_required
 
 from users import get_single_user
 from water import add_consumption
@@ -12,6 +13,7 @@ from water import add_consumption
 shower = Blueprint('shower', __name__)
 
 @shower.route('/start', methods=['GET'])
+@login_required
 def start_shower():
     # consuma din dispenser
     # pune quality in baza de date
@@ -25,6 +27,7 @@ def start_shower():
         return song
 
 @shower.route('/end', methods=['POST'])
+@login_required
 def end_shower():
     add_consumption()
     return {"message":"Shower ended successfully!"}

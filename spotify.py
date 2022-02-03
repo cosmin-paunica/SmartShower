@@ -1,5 +1,6 @@
 
 from dotenv import load_dotenv
+from auth import login_required
 import os
 
 from db_conn import get_db_connection
@@ -12,6 +13,7 @@ load_dotenv()
 SECRET_KEY = os.getenv("SPOTIFY_TOKEN")
 
 spotify = Blueprint('spotify', __name__)
+
 
 @spotify.route('/song/<songid>', methods=['GET'])
 def get_song(songid):

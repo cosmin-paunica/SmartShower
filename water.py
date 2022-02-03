@@ -1,6 +1,7 @@
 from db_conn import get_db_connection
 from subprocess import STARTF_USESTDHANDLES
 from flask import Blueprint, request
+from auth import login_required
 
 from users import get_single_user
 
@@ -9,6 +10,7 @@ from users import get_single_user
 water = Blueprint('water', __name__)
 
 @water.route('/water/temperature', methods=['GET'])
+@login_required
 def get_water_params():
     conn = get_db_connection()
     rows = conn.execute('SELECT * FROM water ORDER BY id DESC').fetchone()
@@ -18,6 +20,7 @@ def get_water_params():
     return result
 
 @water.route('/water/temperature', methods=['PUT'])
+@login_required
 def set_water_params():
     conn = get_db_connection()
     data = request.get_json(force=True)
@@ -29,6 +32,7 @@ def set_water_params():
     return {'message':'Watter parameters added successfully!'}
 
 @water.route('/water/consumption', methods=['POST'])
+@login_required
 def add_consumption():
     conn = get_db_connection()
     data = request.get_json(force=True)

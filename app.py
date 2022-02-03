@@ -1,6 +1,5 @@
 import eventlet
 import json
-import auth
 import time
 
 from flask import Flask
@@ -15,6 +14,7 @@ from quality import quality
 from shower import shower
 from status import get_status
 from spotify import spotify
+from auth import bp
 
 eventlet.monkey_patch()
 
@@ -30,7 +30,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'PDS19UkUAd1H1NiAqJjGAFT6KrN78W5J'
 
-    app.register_blueprint(auth.bp)
+    app.register_blueprint(bp)
     app.register_blueprint(users)
     app.register_blueprint(dispenser)
     app.register_blueprint(water)
