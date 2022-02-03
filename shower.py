@@ -21,7 +21,7 @@ def start_shower():
     set_quality_info()
     data = request.get_json(force=True)
     song = get_song(data['song_id'])
-    if song.error is not None:
+    if "error" not in song.keys():
         return {"message":"Shower started successfully!"}
     else:
         return song

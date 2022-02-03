@@ -52,7 +52,7 @@ def create_app():
 
 def create_mqtt_app():
     # Setup connection to mqtt broker
-    app.config['MQTT_BROKER_URL'] = 'localhost'  # use the free broker from HIVEMQ
+    app.config['MQTT_BROKER_URL'] = '127.0.0.1'  # use the free broker from HIVEMQ
     app.config['MQTT_BROKER_PORT'] = 1883  # default port for non-tls connection
     app.config['MQTT_USERNAME'] = ''  # set the username here if you need authentication for the broker
     app.config['MQTT_PASSWORD'] = ''  # set the password here if the broker demands authentication
@@ -84,8 +84,8 @@ def background_thread():
 
 def run_socketio_app():
     create_app()
-    # create_mqtt_app()
-    # socketio.run(app, host='localhost', port=5000, use_reloader=False, debug=True)
+    create_mqtt_app()
+    socketio.run(app, host='127.0.0.1', port=5000, use_reloader=False, debug=True)
 
 if __name__ == '__main__':
     run_socketio_app()

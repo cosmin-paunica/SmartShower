@@ -68,13 +68,13 @@ def login():
     session['user_id'] = user['name']
     return jsonify({'message': 'user logged in succesfully'}), 200
 
-@bp.route('/logout')
+@bp.route('/logout',  methods=["GET"])
 def logout():
     session.clear()
     return jsonify({'message': 'user logged out succesfully'}), 200
 
 
-# !!!!NETESTATE!!!! (they should work tho)
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
