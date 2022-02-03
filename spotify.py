@@ -14,8 +14,8 @@ SECRET_KEY = os.getenv("SPOTIFY_TOKEN")
 
 spotify = Blueprint('spotify', __name__)
 
+
 @spotify.route('/song/<songid>', methods=['GET'])
-@login_required
 def get_song(songid):
     song = requests \
         .get(f'https://api.spotify.com/v1/tracks/{songid}',
