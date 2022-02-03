@@ -17,10 +17,6 @@
       "description": "Everything about water temperature"
     },
     {
-      "name": "water_consumption",
-      "description": "Everything about water consumption"
-    },
-    {
       "name": "dispenser",
       "description": "Stats about the shower gel levels"
     },
@@ -34,7 +30,7 @@
     "http"
   ],
   "paths": {
-    "/water": {
+    "/water/temperature": {
       "put": {
         "tags": [
           "water"
@@ -94,6 +90,41 @@
           },
           "405": {
             "description": "Validation exception"
+          }
+        }
+      }
+    },
+    "/water/consumption": {
+      "post": {
+        "tags": [
+          "water"
+        ],
+        "summary": "Consume water",
+        "description": "Register the consumed water volume in the db",
+        "operationId": "setWaterConsumption",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "A temperature and a date",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WaterConsumption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "405": {
+            "description": "Invalid input"
           }
         }
       }
@@ -317,6 +348,19 @@
           "example": "12-02-2022 13:30"
         }
       }
+    },
+    "WaterConsumption": {
+      "type":"object",
+      "required": [
+        "consumption"
+      ],
+      "properties": {
+        "consumption": {
+          "type": "integer",
+          "example": "2"
+        }
+      }
+
     },
     "WaterTemperatureRow": {
       "type": "object",
