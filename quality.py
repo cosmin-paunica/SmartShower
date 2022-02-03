@@ -11,7 +11,7 @@ quality = Blueprint('quality', __name__)
 @quality.route('/quality', methods=['GET'])
 def get_quality_info():
     conn = get_db_connection()
-    info = conn.execute('SELECT * FROM quality ORDER BY id DESC').fetchone()
+    info = conn.execute('SELECT dispenser_quality, filter_quality, water_quality FROM quality ORDER BY id DESC').fetchone()
     result = dict(info)
     conn.close()
     return result
